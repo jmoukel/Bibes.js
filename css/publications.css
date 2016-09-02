@@ -1,0 +1,69 @@
+
+html, body 
+{
+    height:  100%  !important;
+	width:   100%;
+	margin:  0px;
+	padding: 0px;
+}
+
+/*******************
+ *				   *
+ * 	   NAV BAR     *
+ *				   *
+ *******************/
+
+ .ivpcl-navBarDiv
+{
+	background-color: rgb(248, 248, 248);
+	height: 53px;
+	background-image: url(../pics/headerBanner.png);
+}
+
+/*******************
+ *				   *
+ * 	    HEADER     *
+ *				   *
+ *******************/
+
+ .jumbotron
+ {
+ 	padding:0;
+ }
+
+ .jumbotron p
+ {
+ 	margin:0;
+ }
+
+ .form-control
+ {
+ 	height: 45px;
+ 	font-size: 1.3em;
+ }
+
+ .panel-body
+ {
+ 	padding: 9px;
+ }
+
+ .ivpcl-header-title
+ {
+    font-family: "Oswald", Verdana, Tahoma;
+ 	font-size: 2.5em !important;
+ 	color: rgb(110, 110, 110);
+ 	padding-top: 40px;
+ }
+
+ .ivpcl-header-subtitle
+ {
+ 	font-size: 1.3em !important;
+ 	color: rgb(140, 140, 140);
+ 	padding-bottom: 20px;
+ }
+
+ .ivpcl-publications-panel
+ {
+ 	height:65px;
+ 	background-color: rgb(200, 200, 200);
+ }

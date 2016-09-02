@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<!-- 
+    META Tags
+-->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content ="IE = edge"> 
+<meta name ="viewport" content="width = device-width, initial-scale = 1">
+
+<!-- 
+    Importing JQuery
+-->
+<script src="packages/jquery/jquery-3.1.0.min.js"></script>
+	
+<!-- 
+    Importing BibTex Parser
+-->
+<script src="packages/bibtex-parser-master/bibtexParse.js"></script>
+
+<!-- 
+    Importing Bootstrap (through CDN)
+-->
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel ="stylesheet">
+	
+<!-- 
+    Importing Custom JS
+-->
+<script src="js/publications.js"></script>
+
+<!-- 
+    Importing Custom CSS
+-->
+<link rel="stylesheet" href="css/publications.css" type="text/css" media="screen" />
+
+<!-- 
+    Importing Oswald Font
+-->
+<link href='fonts/Oswald-Regular.ttf' rel='stylesheet' type='text/css'>
+
+</head>
+<body onLoad="funinit()">
+
+	<!-- NAV BAR -->
+	<div class="ivpcl-navBarDiv">
+	</div>
+
+	<!-- HEADER -->
+	<div class="jumbotron">
+
+		<!-- TITLE & SUBTITLE -->
+		<p class="text-center ivpcl-header-title"> OUR PUBLICATIONS </p>
+		<p class="text-center ivpcl-header-subtitle"> Search through almost 300 publications. </p>
+
+		<!-- SEARCH BAR PANEL -->
+		<div class="panel panel-default ivpcl-publications-panel">
+		  <div class="panel-body">
+		    <div class='form'>
+					<div class="row"> 
+						<div class="col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3"> 
+							<div class="form-group"> 
+								<input type="text" class="form-control" id="inputName" placeholder="Search"> 
+							</div> 
+						</div>
+					</div>
+				</div>
+		  </div>
+		</div>
+
+<!-- 
+				<div class='form'>
+					<div class="row"> 
+						<div class="col-md-4 col-lg-4"> 
+							<div class="form-group"> 
+								<input type="text" class="form-control" id="inputName" placeholder="Enter your name"> 
+							</div> 
+						</div>
+					</div>
+				</div>
+		 -->
+    </div>
+
+	</div>
+
+	<p class='publicationsDiv'>  
+	</p>
+
+	<script>
+
+	function funinit()
+	{
+		publications.init();
+	}
+
+	</script>
+
+</body>
