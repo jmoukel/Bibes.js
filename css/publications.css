@@ -29,9 +29,15 @@ html, body
  .jumbotron
  {
  	padding:0;
+ 	margin:0;
  }
 
  .jumbotron p
+ {
+ 	margin:0;
+ }
+
+ .panel
  {
  	margin:0;
  }
@@ -66,4 +72,24 @@ html, body
  {
  	height:65px;
  	background-color: rgb(200, 200, 200);
+ }
+
+/*******************
+ *				   *
+ * 	   FILTERS     *
+ *				   *
+ *******************/
+
+ .ivpcl-filters-container
+ {
+ 	background-color: #CCCCCC;
+ 	height: 100px;
+ }
+
+ .dropdown-toggle
+ {
+ 	color: #FF0000;
+ 	border-width: 4px;
+ 	border-color: #00ff00;
+ 	border-radius: 4px;
  }
