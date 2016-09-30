@@ -64,7 +64,8 @@
 					<div class="row">
 						<div class="col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
 							<div class="form-group">
-								<input type="text" class="form-control" id="inputName" placeholder="Search">
+								<input type="text" class="form-control" id="searchTextField" placeholder="Search">
+  							<span id="searchClearButton" class="glyphicon glyphicon-remove-circle"></span>
 							</div>
 						</div>
 					</div>
@@ -107,6 +108,7 @@
 							</ul>
 						</li>
 
+						<!-- CLEAR ALL FILTERS BUTTON -->
 						<li>
 							<button type="button" class="btn btn-default ivcpl-clear-button" id="clear-button">Clear</button>
 						</li>
@@ -121,10 +123,13 @@
 						</ul>
 
 					</ul>
-				</div>
 			</div>
 		</div>
 	</div>
+</div>
+
+	<!-- NUMBER OF RESULTS TEXT -->
+	<div class="col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3 ivcpl-results-number" id="results-number-text">About 20 results</div>
 
 	<!-- PUBLICATIONS LIST -->
 	<table class="table table-hover" id="publicationsDiv">

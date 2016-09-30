@@ -13,6 +13,9 @@
 	var SORTBY_FILTER_SELECTION_CLASS_ID = "#sortby-filter-selection";
 	var SORTBY_FILTER_CLASS_ID 					 = "#sortby-filter";
 	var CLEAR_BUTTON_CLASS_ID 					 = "#clear-button";
+	var RESULTS_TEXT_CLASS_ID 					 = "#results-number-text";
+	var SEARCH_TEXT_FIELD_CLASS_ID			 = "#searchTextField";
+	var SEARCH_CLEAR_BUTTON_CLASS_ID     = "#searchClearButton";
 	var ALL_AUTHORS_TEXT							   = "ALL AUTHORS";
 	var ALL_TIME_TEXT									   = "ALL TIME";
 	var OLDER_TEXT											 = "OLDER";
@@ -29,6 +32,7 @@
 	var publicationsArray;
 	var yearsArray, typesArray, authorsArray;
 	var selectedAuthor, selectedYear, selectedSortBy;
+	var renderPublicationsTimer;
 
 	/**************************
 	 *	       OBJECTS        *
@@ -144,10 +148,10 @@
 	 	// Rendering everything
 	 	renderAll();
 
-		// ONLY for debugging: printing the Bibtext content but in JSON format.
-		console.log(bibTextJSON);
-		console.log(publicationsArray);
-		console.log(authorsArray);
+		// Uncomment ONLY for debugging: printing the Bibtext content but in JSON format.
+		//console.log(bibTextJSON);
+		//console.log(publicationsArray);
+		//console.log(authorsArray);
 	 }
 
 	 /**
@@ -197,11 +201,22 @@
 	 	if (isNaN(bibTextJSON) == false)
 	 	{
 		 	var htmlToRender = "";
-		 	var publications = getPublicationFromFilters();
+		 	var publications = getPublicationsListFromFilters();
+
+			// Setting number of results text.
+			$(RESULTS_TEXT_CLASS_ID).html("Showing <b>" + publications.length + "</b> results");
 
 		 	// Going through every publication.
 		 	for (var i=0; i<publications.length; i++)
 		 	{
+				var searchValue = $(SEARCH_TEXT_FIELD_CLASS_ID).val();
+			  var regExp;
+
+				if (searchValue.length > 0)
+					regExp = new RegExp(searchValue + "+", "i");
+				else
+					regExp = new RegExp("");
+
 				// Starting Row
 				if (i % 2 !== 0)
 		 	  	htmlToRender += "<tr><td class='col-lg-1 col-md-1 col-sm-1 col-xm-1'></td>";
@@ -210,16 +225,16 @@
 
 		 		// Year
 		 		htmlToRender += "<td class='col-lg-2 col-md-2 col-sm-2 col-xm-2 text-center ivcpl-publication-year'>";
-		 		htmlToRender += publications[i].year.length !== 0 && publications[i].year != 0 ? publications[i].year : "-";
+		 		htmlToRender += publications[i].year.length !== 0 && publications[i].year != 0 ? publications[i].year.replace(regExp, "<b>" + searchValue + "</b>") : "-";
 		 		htmlToRender += "</td>";
 
 		 		// Description
 		 		htmlToRender += "<td class='col-lg-6 col-md-6 col-sm-6 col-xm-6 text-left'>";
 		 		htmlToRender += "<div class='ivcpl-publication-description-title'>";
-		 		htmlToRender += publications[i].booktitle.length !== 0 ? publications[i].booktitle : "Unknown Title";
+		 		htmlToRender += publications[i].booktitle.length !== 0 ? publications[i].booktitle.replace(regExp, "<b>" + searchValue + "</b>") : "Unknown Title";
 		 		htmlToRender += "</div>";
 		 		htmlToRender += "<div class='ivcpl-publication-description-subtitle'>";
-		 		htmlToRender += publications[i].author;
+		 		htmlToRender += publications[i].author.replace(regExp, "<b>" + searchValue + "</b>");
 		 		htmlToRender += "</div>";
 		 		htmlToRender += "</td>";
 
@@ -227,6 +242,9 @@
 		 		htmlToRender += "<td class='col-lg-1 col-md-1 col-sm-1 col-xm-1 text-center ivcpl-publication-downloads'>";
 		 		if (publications[i].url.length !== 0)
 		 			htmlToRender += "<a target='_blank' href='"+ publications[i].url +"'><img src='pics/urlIcon.png'></a>";
+				else
+		 			htmlToRender += "<img src='pics/urlDisableIcon.png'>";
+
 		 		htmlToRender += "</td>";
 
 		 		// Ending row
@@ -240,6 +258,9 @@
 		 	// Inserting html into the div.
 		 	$("#" + PUBLICATIONS_DIV_CLASS_NAME).html(htmlToRender);
 	 	}
+
+		// Stopping timer
+		clearInterval(renderPublicationsTimer);
 	 }
 
 	/**
@@ -250,28 +271,28 @@
 	 {
 	 		// Selecting the most recent years as options for the Time filter.
 			$(TIME_FILTER_CLASS_ID).html("");
-		  $(TIME_FILTER_CLASS_ID).append("<li><a href='#'>" + ALL_TIME_TEXT + "</a></li>");
+		  $(TIME_FILTER_CLASS_ID).append("<li><a href='javascript:void(0);'>" + ALL_TIME_TEXT + "</a></li>");
 	 		for (var i=0; i<yearsArray.length && i<NUMBER_OF_TIMES_IN_FILTER; i++)
-				$(TIME_FILTER_CLASS_ID).append("<li><a href='#'>" + yearsArray[i].toUpperCase() + "</a></li>");
-			$(TIME_FILTER_CLASS_ID).append("<li><a href='#'>" + OLDER_TEXT + "</a></li>");
+				$(TIME_FILTER_CLASS_ID).append("<li><a href='javascript:void(0);'>" + yearsArray[i].toUpperCase() + "</a></li>");
+			$(TIME_FILTER_CLASS_ID).append("<li><a href='javascript:void(0);'>" + OLDER_TEXT + "</a></li>");
 
 			// Selecting the first 5 authors with the most publications.
 			$(AUTHOR_FILTER_CLASS_ID).html("");
-		  $(AUTHOR_FILTER_CLASS_ID).append("<li><a href='#'>" + ALL_AUTHORS_TEXT + "</a></li>");
+		  $(AUTHOR_FILTER_CLASS_ID).append("<li><a href='javascript:void(0);'>" + ALL_AUTHORS_TEXT + "</a></li>");
 	 		for (var i=0; i<authorsArray.length && i<NUMBER_OF_AUTHORS_IN_FILTER; i++)
-				$(AUTHOR_FILTER_CLASS_ID).append("<li><a href='#'>" + authorsArray[i][0].toUpperCase() + "</a></li>");
+				$(AUTHOR_FILTER_CLASS_ID).append("<li><a href='javascript:void(0);'>" + authorsArray[i][0].toUpperCase() + "</a></li>");
 
 			// Adding sorting typesArray
 			$(SORTBY_FILTER_CLASS_ID).html("");
-		  $(SORTBY_FILTER_CLASS_ID).append("<li><a href='#'>" + SORT_BY_MOST_RECENT_TEXT + "</a></li>");
-		  $(SORTBY_FILTER_CLASS_ID).append("<li><a href='#'>" + SORT_BY_OLDEST_TEXT + "</a></li>");
+		  $(SORTBY_FILTER_CLASS_ID).append("<li><a href='javascript:void(0);'>" + SORT_BY_MOST_RECENT_TEXT + "</a></li>");
+		  $(SORTBY_FILTER_CLASS_ID).append("<li><a href='javascript:void(0);'>" + SORT_BY_OLDEST_TEXT + "</a></li>");
 	 }
 
 	/**
 	 * It returns the list of publications to be shown to the user taking into account the selections of each filter.
 	 *
 	 */
-	 function getPublicationFromFilters()
+	 function getPublicationsListFromFilters()
 	 {
 		 var filteredPublicationsArray = [];
 
@@ -316,6 +337,18 @@
 						publicationSufficesAllFilters = false;
 				}
 
+				// Checking if publication suffices the search text.
+				if (publicationSufficesAllFilters)
+				{
+						var searchValue = $(SEARCH_TEXT_FIELD_CLASS_ID).val();
+
+						if (searchValue.length > 0)
+						{
+								var regExp = new RegExp(searchValue + "+", "i");
+								publicationSufficesAllFilters = regExp.test(publicationsArray[i].booktitle) || regExp.test(publicationsArray[i].author) || regExp.test(publicationsArray[i].year);
+						}
+				}
+
 				// Adding filtered publication to the array of publications to be shown to the user.
 				if (publicationSufficesAllFilters)
 					filteredPublicationsArray.push(publicationsArray[i]);
@@ -338,8 +371,6 @@
 					 	filteredPublicationsArray.sort(function(a, b) {return a.year - b.year});;
 				 }
 		 }
-
-		 console.log(filteredPublicationsArray);
 
 	 		return filteredPublicationsArray;
 	 }
@@ -382,7 +413,7 @@
 	 		$(filterClassId).append(newSelection + '<span class="caret"></span>');
 
 	 		// Printing for debugging
-			console.log(newSelection);
+		  //console.log(newSelection);
 	 	}
 	 }
 
@@ -498,6 +529,39 @@
 	{
     	$(CLEAR_BUTTON_CLASS_ID).bind('click', function (e) {
 	    		setFilterDefaults();
+    	});
+	});
+
+	/**
+	 *	It handles the typing in the Search text field.
+	 */
+	$(function()
+	{
+    	$(SEARCH_TEXT_FIELD_CLASS_ID).bind('keyup', function (e) {
+
+				// Rendering publications again to reflect the selection.
+				clearInterval(renderPublicationsTimer);
+				renderPublicationsTimer = setInterval(renderPublications, 350);
+
+				if ($(SEARCH_TEXT_FIELD_CLASS_ID).val().length > 0)
+					$(SEARCH_CLEAR_BUTTON_CLASS_ID).show()
+				else
+					$(SEARCH_CLEAR_BUTTON_CLASS_ID).hide()
+    	});
+	});
+
+	/**
+	 *	It handles the Clear Search button.
+	 */
+	$(function()
+	{
+    	$(SEARCH_CLEAR_BUTTON_CLASS_ID).bind('click', function (e)
+			{
+	    		$(SEARCH_TEXT_FIELD_CLASS_ID).val("");
+					$(SEARCH_CLEAR_BUTTON_CLASS_ID).hide()
+
+					// Rendering publications again to reflect the change.
+					renderPublications();
     	});
 	});
 })
